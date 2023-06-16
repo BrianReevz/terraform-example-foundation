@@ -18,10 +18,8 @@
 | mode | Network deployment mode, should be set to `hub` or `spoke` when `enable_hub_and_spoke` architecture chosen, keep as `null` otherwise. | `string` | `null` | no |
 | nat\_bgp\_asn | BGP ASN for first NAT cloud routes. | `number` | `64514` | no |
 | nat\_enabled | Toggle creation of NAT cloud router. | `bool` | `false` | no |
-| nat\_num\_addresses | Number of external IPs to reserve for Cloud NAT. | `number` | `2` | no |
 | nat\_num\_addresses\_region1 | Number of external IPs to reserve for first Cloud NAT. | `number` | `2` | no |
 | nat\_num\_addresses\_region2 | Number of external IPs to reserve for second Cloud NAT. | `number` | `2` | no |
-| org\_id | Organization ID | `string` | n/a | yes |
 | private\_service\_cidr | CIDR range for private service networking. Used for Cloud SQL and other managed services. | `string` | `null` | no |
 | private\_service\_connect\_ip | Internal IP to be used as the private service connect endpoint. | `string` | n/a | yes |
 | project\_id | Project ID for Private Shared VPC. | `string` | n/a | yes |
@@ -35,6 +33,10 @@
 |------|-------------|
 | network\_name | The name of the VPC being created |
 | network\_self\_link | The URI of the VPC being created |
+| region1\_router1 | Router 1 for Region 1 |
+| region1\_router2 | Router 2 for Region 1 |
+| region2\_router1 | Router 1 for Region 2 |
+| region2\_router2 | Router 2 for Region 2 |
 | subnets\_flow\_logs | Whether the subnets have VPC flow logs enabled |
 | subnets\_ips | The IPs and CIDRs of the subnets being created |
 | subnets\_names | The names of the subnets being created |

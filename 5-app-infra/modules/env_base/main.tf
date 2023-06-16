@@ -15,7 +15,6 @@
  */
 
 locals {
-  environment_code = element(split("", var.environment), 0)
   env_project_ids = {
     "sample-base"     = data.terraform_remote_state.projects_env.outputs.base_shared_vpc_project,
     "sample-floating" = data.terraform_remote_state.projects_env.outputs.floating_project,
@@ -45,7 +44,7 @@ resource "google_service_account" "compute_engine_service_account" {
 
 module "instance_template" {
   source  = "terraform-google-modules/vm/google//modules/instance_template"
-  version = "~> 7.9"
+  version = "~> 8.0"
 
   machine_type = var.machine_type
   region       = var.region
@@ -64,7 +63,7 @@ module "instance_template" {
 
 module "compute_instance" {
   source  = "terraform-google-modules/vm/google//modules/compute_instance"
-  version = "~> 7.9"
+  version = "~> 8.0"
 
   region            = var.region
   subnetwork        = local.subnetwork_self_link

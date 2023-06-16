@@ -8,7 +8,9 @@ This module implements the recommendation proposed in [Establishing 99.99% Avail
 
 ## Usage
 
-1. Rename `interconnect.tf.example` to `interconnect.tf` in the environment folder in `3-networks-dual-svpc/envs/<environment>`
+1. Rename `interconnect.tf.example` to `interconnect.tf` in the shared envs folder in `3-networks-dual-svpc/envs/shared`
+1. Update the file `interconnect.tf` with values that are valid for your environment for the interconnects, locations, candidate subnetworks, vlan_tag8021q and peer info.
+1. Rename `interconnect.tf.example` to `interconnect.tf` in base_env folder in `3-networks-dual-svpc/modules/base_env`.
 1. Update the file `interconnect.tf` with values that are valid for your environment for the interconnects, locations, candidate subnetworks, vlan_tag8021q and peer info.
 1. The candidate subnetworks and vlan_tag8021q variables can be set to `null` to allow the interconnect module to auto generate these values.
 
@@ -18,7 +20,6 @@ This module implements the recommendation proposed in [Establishing 99.99% Avail
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | cloud\_router\_labels | A map of suffixes for labelling vlans with four entries like "vlan\_1" => "suffix1" with keys from `vlan_1` to `vlan_4`. | `map(string)` | `{}` | no |
-| folder\_prefix | Name prefix to use for folders created. | `string` | `"fldr"` | no |
 | interconnect\_project\_id | Interconnect project ID. | `string` | n/a | yes |
 | peer\_asn | Peer BGP Autonomous System Number (ASN). | `number` | n/a | yes |
 | peer\_name | Name of this BGP peer. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression [a-z]([-a-z0-9]\*[a-z0-9])? | `string` | n/a | yes |
@@ -26,10 +27,12 @@ This module implements the recommendation proposed in [Establishing 99.99% Avail
 | region1\_interconnect1 | URL of the underlying Interconnect object that this attachment's traffic will traverse through. | `string` | n/a | yes |
 | region1\_interconnect1\_candidate\_subnets | Up to 16 candidate prefixes that can be used to restrict the allocation of cloudRouterIpAddress and customerRouterIpAddress for this attachment. All prefixes must be within link-local address space (169.254.0.0/16) and must be /29 or shorter (/28, /27, etc). | `list(string)` | `null` | no |
 | region1\_interconnect1\_location | Name of the interconnect location used in the creation of the Interconnect for the first location of region1 | `string` | n/a | yes |
+| region1\_interconnect1\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the first location of region1. | `string` | n/a | yes |
 | region1\_interconnect1\_vlan\_tag8021q | The IEEE 802.1Q VLAN tag for this attachment, in the range 2-4094. | `string` | `null` | no |
 | region1\_interconnect2 | URL of the underlying Interconnect object that this attachment's traffic will traverse through. | `string` | n/a | yes |
 | region1\_interconnect2\_candidate\_subnets | Up to 16 candidate prefixes that can be used to restrict the allocation of cloudRouterIpAddress and customerRouterIpAddress for this attachment. All prefixes must be within link-local address space (169.254.0.0/16) and must be /29 or shorter (/28, /27, etc). | `list(string)` | `null` | no |
 | region1\_interconnect2\_location | Name of the interconnect location used in the creation of the Interconnect for the second location of region1 | `string` | n/a | yes |
+| region1\_interconnect2\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the second location of region1. | `string` | n/a | yes |
 | region1\_interconnect2\_vlan\_tag8021q | The IEEE 802.1Q VLAN tag for this attachment, in the range 2-4094. | `string` | `null` | no |
 | region1\_router1\_name | Name of the Router 1 for Region 1 where the attachment resides. | `string` | n/a | yes |
 | region1\_router2\_name | Name of the Router 2 for Region 1 where the attachment resides. | `string` | n/a | yes |
@@ -37,10 +40,12 @@ This module implements the recommendation proposed in [Establishing 99.99% Avail
 | region2\_interconnect1 | URL of the underlying Interconnect object that this attachment's traffic will traverse through. | `string` | n/a | yes |
 | region2\_interconnect1\_candidate\_subnets | Up to 16 candidate prefixes that can be used to restrict the allocation of cloudRouterIpAddress and customerRouterIpAddress for this attachment. All prefixes must be within link-local address space (169.254.0.0/16) and must be /29 or shorter (/28, /27, etc). | `list(string)` | `null` | no |
 | region2\_interconnect1\_location | Name of the interconnect location used in the creation of the Interconnect for the first location of region2 | `string` | n/a | yes |
+| region2\_interconnect1\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the first location of region2. | `string` | n/a | yes |
 | region2\_interconnect1\_vlan\_tag8021q | The IEEE 802.1Q VLAN tag for this attachment, in the range 2-4094. | `string` | `null` | no |
 | region2\_interconnect2 | URL of the underlying Interconnect object that this attachment's traffic will traverse through. | `string` | n/a | yes |
 | region2\_interconnect2\_candidate\_subnets | Up to 16 candidate prefixes that can be used to restrict the allocation of cloudRouterIpAddress and customerRouterIpAddress for this attachment. All prefixes must be within link-local address space (169.254.0.0/16) and must be /29 or shorter (/28, /27, etc). | `list(string)` | `null` | no |
 | region2\_interconnect2\_location | Name of the interconnect location used in the creation of the Interconnect for the second location of region2 | `string` | n/a | yes |
+| region2\_interconnect2\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the second location of region2. | `string` | n/a | yes |
 | region2\_interconnect2\_vlan\_tag8021q | The IEEE 802.1Q VLAN tag for this attachment, in the range 2-4094. | `string` | `null` | no |
 | region2\_router1\_name | Name of the Router 1 for Region 2 where the attachment resides. | `string` | n/a | yes |
 | region2\_router2\_name | Name of the Router 2 for Region 2 where the attachment resides | `string` | n/a | yes |

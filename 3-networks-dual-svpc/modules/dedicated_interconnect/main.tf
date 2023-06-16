@@ -23,9 +23,9 @@ locals {
 
 module "interconnect_attachment1_region1" {
   source  = "terraform-google-modules/cloud-router/google//modules/interconnect_attachment"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
-  name    = "vl-${var.region1_interconnect1_location}-${var.vpc_name}-${var.region1}-${local.suffix1}"
+  name    = "vl-${var.region1_interconnect1_onprem_dc}-${var.region1_interconnect1_location}-${var.vpc_name}-${var.region1}-${local.suffix1}"
   project = var.interconnect_project_id
   region  = var.region1
   router  = var.region1_router1_name
@@ -46,9 +46,9 @@ module "interconnect_attachment1_region1" {
 
 module "interconnect_attachment2_region1" {
   source  = "terraform-google-modules/cloud-router/google//modules/interconnect_attachment"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
-  name    = "vl-${var.region1_interconnect2_location}-${var.vpc_name}-${var.region1}-${local.suffix2}"
+  name    = "vl-${var.region1_interconnect2_onprem_dc}-${var.region1_interconnect2_location}-${var.vpc_name}-${var.region1}-${local.suffix2}"
   project = var.interconnect_project_id
   region  = var.region1
   router  = var.region1_router2_name
@@ -69,9 +69,9 @@ module "interconnect_attachment2_region1" {
 
 module "interconnect_attachment1_region2" {
   source  = "terraform-google-modules/cloud-router/google//modules/interconnect_attachment"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
-  name    = "vl-${var.region2_interconnect1_location}-${var.vpc_name}-${var.region2}-${local.suffix3}"
+  name    = "vl-${var.region2_interconnect1_onprem_dc}-${var.region2_interconnect1_location}-${var.vpc_name}-${var.region2}-${local.suffix3}"
   project = var.interconnect_project_id
   region  = var.region2
   router  = var.region2_router1_name
@@ -92,9 +92,9 @@ module "interconnect_attachment1_region2" {
 
 module "interconnect_attachment2_region2" {
   source  = "terraform-google-modules/cloud-router/google//modules/interconnect_attachment"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
-  name    = "vl-${var.region2_interconnect2_location}-${var.vpc_name}-${var.region2}-${local.suffix4}"
+  name    = "vl-${var.region2_interconnect2_onprem_dc}-${var.region2_interconnect2_location}-${var.vpc_name}-${var.region2}-${local.suffix4}"
   project = var.interconnect_project_id
   region  = var.region2
   router  = var.region2_router2_name

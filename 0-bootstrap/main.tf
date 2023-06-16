@@ -33,9 +33,8 @@ locals {
   org_admins_org_iam_permissions = var.org_policy_admin_role == true ? [
     "roles/orgpolicy.policyAdmin", "roles/resourcemanager.organizationAdmin", "roles/billing.user"
   ] : ["roles/resourcemanager.organizationAdmin", "roles/billing.user"]
-  bucket_self_link_prefix = "https://www.googleapis.com/storage/v1/b/"
-  group_org_admins        = var.groups.create_groups ? var.groups.required_groups.group_org_admins : var.group_org_admins
-  group_billing_admins    = var.groups.create_groups ? var.groups.required_groups.group_billing_admins : var.group_billing_admins
+  group_org_admins     = var.groups.create_groups ? var.groups.required_groups.group_org_admins : var.group_org_admins
+  group_billing_admins = var.groups.create_groups ? var.groups.required_groups.group_billing_admins : var.group_billing_admins
 }
 
 resource "google_folder" "bootstrap" {
@@ -50,7 +49,7 @@ module "seed_bootstrap" {
   org_id                         = var.org_id
   folder_id                      = google_folder.bootstrap.id
   project_id                     = "${var.project_prefix}-b-seed"
-  state_bucket_name              = "${var.bucket_prefix}-b-tfstate"
+  state_bucket_name              = "${var.bucket_prefix}-${var.project_prefix}-b-seed-tfstate"
   force_destroy                  = var.bucket_force_destroy
   billing_account                = var.billing_account
   group_org_admins               = local.group_org_admins
@@ -92,7 +91,8 @@ module "seed_bootstrap" {
     "securitycenter.googleapis.com",
     "accesscontextmanager.googleapis.com",
     "billingbudgets.googleapis.com",
-    "essentialcontacts.googleapis.com"
+    "essentialcontacts.googleapis.com",
+    "assuredworkloads.googleapis.com",
   ]
 
   sa_org_iam_permissions = []

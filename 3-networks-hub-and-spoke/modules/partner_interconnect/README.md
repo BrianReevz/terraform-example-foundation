@@ -4,14 +4,12 @@ This module implements the recommendation proposed in [Establishing 99.99% Avail
 
 ## Prerequisites
 
-1. Provisioning of four [VLAN attachments](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/partner-overview) in the Hub project in the specified environment. That would be the `prj-c-{base|restricted}-net-hub` under the folder `fldr-common` in case of Hub and Spoke architecture.
-
-Without Hub and Spoke enabled VLAN attachments will be created in `prj-{p|n|d}-shared-{base|restricted}` under corresponding environment's folder.
+1. Provisioning of four [VLAN attachments](https://cloud.google.com/network-connectivity/docs/interconnect/concepts/partner-overview) in the Hub project in the specified environment. That would be the `prj-c-{base|restricted}-net-hub` and  `prj-c-dns-hub` under the folder `fldr-common` in case of Hub and Spoke architecture.
 
 ## Usage
 
-1. Rename `partner_interconnect.tf.example` to `partner_interconnect.tf` in the environment folder in `3-networks-hub-and-spoke/modules/base_env` .
-1. Update the `enable_partner_interconnect` to `true` in each `main.tf` file in the environment folder in `3-networks-hub-and-spoke/envs/<environment>` .
+1. Rename `partner_interconnect.tf.example` to `partner_interconnect.tf`in the shared envs folder in `3-networks-hub-and-spoke/envs/shared`.
+1. Rename `partner_interconnect.auto.tfvars.example` to `partner_interconnect.auto.tfvars` in the shared envs folder in `3-networks-hub-and-spoke/envs/shared`.
 1. Update the file `partner_interconnect.tf` with values that are valid for your environment for the VLAN attachments, locations.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
@@ -24,16 +22,19 @@ Without Hub and Spoke enabled VLAN attachments will be created in `prj-{p|n|d}-s
 | preactivate | Preactivate Partner Interconnect attachments, works only for level3 Partner Interconnect | `string` | `false` | no |
 | region1 | First subnet region. The Partner Interconnect module only configures two regions. | `string` | n/a | yes |
 | region1\_interconnect1\_location | Name of the interconnect location used in the creation of the Interconnect for the first location of region1 | `string` | n/a | yes |
+| region1\_interconnect1\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the first location of region1. | `string` | n/a | yes |
 | region1\_interconnect2\_location | Name of the interconnect location used in the creation of the Interconnect for the second location of region1 | `string` | n/a | yes |
+| region1\_interconnect2\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the second location of region1. | `string` | n/a | yes |
 | region1\_router1\_name | Name of the Router 1 for Region 1 where the attachment resides. | `string` | n/a | yes |
 | region1\_router2\_name | Name of the Router 2 for Region 1 where the attachment resides. | `string` | n/a | yes |
 | region2 | Second subnet region. The Partner Interconnect module only configures two regions. | `string` | n/a | yes |
 | region2\_interconnect1\_location | Name of the interconnect location used in the creation of the Interconnect for the first location of region2 | `string` | n/a | yes |
+| region2\_interconnect1\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the first location of region2. | `string` | n/a | yes |
 | region2\_interconnect2\_location | Name of the interconnect location used in the creation of the Interconnect for the second location of region2 | `string` | n/a | yes |
+| region2\_interconnect2\_onprem\_dc | Name of the on premisses data center used in the creation of the Interconnect for the second location of region2. | `string` | n/a | yes |
 | region2\_router1\_name | Name of the Router 1 for Region 2 where the attachment resides. | `string` | n/a | yes |
 | region2\_router2\_name | Name of the Router 2 for Region 2 where the attachment resides | `string` | n/a | yes |
 | vpc\_name | Label to identify the VPC associated with shared VPC that will use the Interconnect. | `string` | n/a | yes |
-| vpc\_type | To which Shared VPC Host attach the Partner Interconnect - base/restricted | `string` | `null` | no |
 
 ## Outputs
 

@@ -94,15 +94,22 @@ This step makes use of the **Dual Shared VPC** architecture, and more details ca
 
 If you provisioned the prerequisites listed in the [Dedicated Interconnect README](./modules/dedicated_interconnect/README.md), follow these steps to enable Dedicated Interconnect to access on-premises resources.
 
+1. Rename `interconnect.tf.example` to `interconnect.tf` in the shared envs folder in `3-networks-dual-svpc/envs/shared`
+1. Update the file `interconnect.tf` with values that are valid for your environment for the interconnects, locations, candidate subnetworks, vlan_tag8021q and peer info.
 1. Rename `interconnect.tf.example` to `interconnect.tf` in base_env folder in `3-networks-dual-svpc/modules/base_env`.
 1. Update the file `interconnect.tf` with values that are valid for your environment for the interconnects, locations, candidate subnetworks, vlan_tag8021q and peer info.
+1. Set variable `enable_dedicated_interconnect` to `true`
 1. The candidate subnetworks and vlan_tag8021q variables can be set to `null` to allow the interconnect module to auto generate these values.
 
 ### Using Partner Interconnect
 
 If you provisioned the prerequisites listed in the [Partner Interconnect README](./modules/partner_interconnect/README.md) follow this steps to enable Partner Interconnect to access on-premises resources.
 
+1. Rename `partner_interconnect.tf.example` to `partner_interconnect.tf` in the shared envs folder in `3-networks-dual-svpc/envs/shared`
+1. Rename `partner_interconnect.auto.tfvars.example` to `partner_interconnect.auto.tfvars` in the shared envs folder in `3-networks-dual-svpc/envs/shared`
+1. Update the file `interconnect.tf` with values that are valid for your environment for the interconnects, locations, candidate subnetworks, vlan_tag8021q and peer info.
 1. Rename `partner_interconnect.tf.example` to `partner_interconnect.tf` in the base-env folder in `3-networks-dual-svpc/modules/base_env` .
+1. Update the `enable_partner_interconnect` to `true` in each `main.tf` file in the environment folder in `3-networks-dual-svpc/envs/<environment>` .
 1. Update the file `partner_interconnect.tf` with values that are valid for your environment for the VLAN attachments, locations, and candidate subnetworks.
 1. The candidate subnetworks variable can be set to `null` to allow the interconnect module to auto generate this value.
 
@@ -134,7 +141,9 @@ If you are not able to use Dedicated or Partner Interconnect, you can also use a
 
 ### Deploying with Cloud Build
 
-1. Clone repo.
+1. Clone the `gcp-networks` repo based on the Terraform output from the `0-bootstrap` step.
+Clone the repo at the same level of the `terraform-example-foundation` folder, the following instructions assume this layout.
+Run `terraform output cloudbuild_project_id` in the `0-bootstrap` folder to get the Cloud Build Project ID.
 
    ```bash
    export CLOUD_BUILD_PROJECT_ID=$(terraform -chdir="terraform-example-foundation/0-bootstrap/" output -raw cloudbuild_project_id)
@@ -267,10 +276,10 @@ See `0-bootstrap` [README-Jenkins.md](../0-bootstrap/README-Jenkins.md#deploying
 
 ### Run Terraform locally
 
-1. Change into `3-networks-dual-svpc` folder, copy the Terraform wrapper script and ensure it can be executed.
+1. The next instructions assume that you are at the same level of the `terraform-example-foundation` folder. Change into `3-networks-dual-svpc` folder, copy the Terraform wrapper script and ensure it can be executed.
 
    ```bash
-   cd 3-networks-dual-svpc
+   cd terraform-example-foundation/3-networks-dual-svpc
    cp ../build/tf-wrapper.sh .
    chmod 755 ./tf-wrapper.sh
    ```

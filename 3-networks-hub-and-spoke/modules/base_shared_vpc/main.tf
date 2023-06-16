@@ -26,8 +26,9 @@ locals {
  *****************************************/
 
 module "main" {
-  source                                 = "terraform-google-modules/network/google"
-  version                                = "~> 5.1"
+  source  = "terraform-google-modules/network/google"
+  version = "~> 5.1"
+
   project_id                             = var.project_id
   network_name                           = local.network_name
   shared_vpc_host                        = "true"
@@ -72,9 +73,10 @@ data "google_compute_network" "vpc_base_net_hub" {
 }
 
 module "peering" {
-  source                    = "terraform-google-modules/network/google//modules/network-peering"
-  version                   = "~> 5.1"
-  count                     = var.mode == "spoke" ? 1 : 0
+  source  = "terraform-google-modules/network/google//modules/network-peering"
+  version = "~> 5.1"
+  count   = var.mode == "spoke" ? 1 : 0
+
   prefix                    = "np"
   local_network             = module.main.network_self_link
   peer_network              = data.google_compute_network.vpc_base_net_hub[0].self_link
@@ -114,7 +116,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
 
 module "region1_router1" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 3.0"
+  version = "~> 4.0"
   count   = var.mode != "spoke" ? 1 : 0
 
   name    = "cr-${local.vpc_name}-${var.default_region1}-cr1"
@@ -130,7 +132,7 @@ module "region1_router1" {
 
 module "region1_router2" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 3.0"
+  version = "~> 4.0"
   count   = var.mode != "spoke" ? 1 : 0
 
   name    = "cr-${local.vpc_name}-${var.default_region1}-cr2"
@@ -146,7 +148,7 @@ module "region1_router2" {
 
 module "region2_router1" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 3.0"
+  version = "~> 4.0"
   count   = var.mode != "spoke" ? 1 : 0
 
   name    = "cr-${local.vpc_name}-${var.default_region2}-cr3"
@@ -162,7 +164,7 @@ module "region2_router1" {
 
 module "region2_router2" {
   source  = "terraform-google-modules/cloud-router/google"
-  version = "~> 3.0"
+  version = "~> 4.0"
   count   = var.mode != "spoke" ? 1 : 0
 
   name    = "cr-${local.vpc_name}-${var.default_region2}-cr4"

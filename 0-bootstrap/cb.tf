@@ -22,6 +22,7 @@ locals {
 
   cicd_project_id = module.tf_source.cloudbuild_project_id
 
+  bucket_self_link_prefix             = "https://www.googleapis.com/storage/v1/b/"
   default_state_bucket_self_link      = "${local.bucket_self_link_prefix}${module.seed_bootstrap.gcs_bucket_tfstate}"
   gcp_projects_state_bucket_self_link = module.gcp_projects_state_bucket.bucket.self_link
 
@@ -67,9 +68,9 @@ resource "random_string" "suffix" {
 
 module "gcp_projects_state_bucket" {
   source  = "terraform-google-modules/cloud-storage/google//modules/simple_bucket"
-  version = "~> 3.2"
+  version = "~> 4.0"
 
-  name          = "bkt-b-gcp-projects-tfstate-${module.seed_bootstrap.seed_project_id}"
+  name          = "${var.bucket_prefix}-${module.seed_bootstrap.seed_project_id}-gcp-projects-tfstate"
   project_id    = module.seed_bootstrap.seed_project_id
   location      = var.default_region
   force_destroy = var.bucket_force_destroy
@@ -77,11 +78,12 @@ module "gcp_projects_state_bucket" {
 
 module "tf_source" {
   source  = "terraform-google-modules/bootstrap/google//modules/tf_cloudbuild_source"
-  version = "~> 6.3"
+  version = "~> 6.4"
 
   org_id                = var.org_id
   folder_id             = google_folder.bootstrap.id
   project_id            = "${var.project_prefix}-b-cicd-${random_string.suffix.result}"
+  location              = var.default_region
   billing_account       = var.billing_account
   group_org_admins      = local.group_org_admins
   buckets_force_destroy = var.bucket_force_destroy
@@ -144,7 +146,7 @@ module "tf_private_pool" {
 
 module "tf_cloud_builder" {
   source  = "terraform-google-modules/bootstrap/google//modules/tf_cloudbuild_builder"
-  version = "~> 6.3"
+  version = "~> 6.4"
 
   project_id                   = module.tf_source.cloudbuild_project_id
   dockerfile_repo_uri          = module.tf_source.csr_repos[local.cloudbuilder_repo].url
@@ -155,6 +157,7 @@ module "tf_cloud_builder" {
   trigger_location             = var.default_region
   enable_worker_pool           = true
   worker_pool_id               = module.tf_private_pool.private_worker_pool_id
+  bucket_name                  = "${var.bucket_prefix}-${module.tf_source.cloudbuild_project_id}-tf-cloudbuilder-build-logs"
 }
 
 module "bootstrap_csr_repo" {
@@ -193,7 +196,7 @@ module "build_terraform_image" {
 
 module "tf_workspace" {
   source   = "terraform-google-modules/bootstrap/google//modules/tf_cloudbuild_workspace"
-  version  = "~> 6.3"
+  version  = "~> 6.4"
   for_each = local.granular_sa
 
   project_id                = module.tf_source.cloudbuild_project_id
@@ -202,6 +205,8 @@ module "tf_workspace" {
   enable_worker_pool        = true
   worker_pool_id            = module.tf_private_pool.private_worker_pool_id
   state_bucket_self_link    = local.cb_config[each.key].state_bucket
+  log_bucket_name           = "${var.bucket_prefix}-${module.tf_source.cloudbuild_project_id}-${local.cb_config[each.key].source}-build-logs"
+  artifacts_bucket_name     = "${var.bucket_prefix}-${module.tf_source.cloudbuild_project_id}-${local.cb_config[each.key].source}-build-artifacts"
   cloudbuild_plan_filename  = "cloudbuild-tf-plan.yaml"
   cloudbuild_apply_filename = "cloudbuild-tf-apply.yaml"
   tf_repo_uri               = module.tf_source.csr_repos[local.cb_config[each.key].source].url

@@ -44,6 +44,26 @@ variable "peer_asn" {
   description = "Peer BGP Autonomous System Number (ASN)."
 }
 
+variable "region1_interconnect1_onprem_dc" {
+  type        = string
+  description = "Name of the on premisses data center used in the creation of the Interconnect for the first location of region1."
+}
+
+variable "region1_interconnect2_onprem_dc" {
+  type        = string
+  description = "Name of the on premisses data center used in the creation of the Interconnect for the second location of region1."
+}
+
+variable "region2_interconnect1_onprem_dc" {
+  type        = string
+  description = "Name of the on premisses data center used in the creation of the Interconnect for the first location of region2."
+}
+
+variable "region2_interconnect2_onprem_dc" {
+  type        = string
+  description = "Name of the on premisses data center used in the creation of the Interconnect for the second location of region2."
+}
+
 variable "region1_interconnect1_location" {
   type        = string
   description = "Name of the interconnect location used in the creation of the Interconnect for the first location of region1"
@@ -154,10 +174,4 @@ variable "region2_interconnect2_vlan_tag8021q" {
   type        = string
   description = "The IEEE 802.1Q VLAN tag for this attachment, in the range 2-4094."
   default     = null
-}
-
-variable "folder_prefix" {
-  description = "Name prefix to use for folders created."
-  type        = string
-  default     = "fldr"
 }

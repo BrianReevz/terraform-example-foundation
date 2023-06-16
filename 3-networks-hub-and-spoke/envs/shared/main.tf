@@ -18,10 +18,12 @@ locals {
   env                               = "common"
   environment_code                  = "c"
   bgp_asn_number                    = var.enable_partner_interconnect ? "16550" : "64514"
+  dns_bgp_asn_number                = var.enable_partner_interconnect ? "16550" : var.bgp_asn_dns
   default_region1                   = "us-west1"
   default_region2                   = "us-central1"
   dns_hub_project_id                = data.terraform_remote_state.org.outputs.dns_hub_project_id
   interconnect_project_id           = data.terraform_remote_state.org.outputs.interconnect_project_id
+  interconnect_project_number       = data.terraform_remote_state.org.outputs.interconnect_project_number
   parent_folder                     = data.terraform_remote_state.bootstrap.outputs.common_config.parent_folder
   org_id                            = data.terraform_remote_state.bootstrap.outputs.common_config.org_id
   billing_account                   = data.terraform_remote_state.bootstrap.outputs.common_config.billing_account
@@ -37,8 +39,26 @@ locals {
   base_net_hub_project_id           = data.terraform_remote_state.org.outputs.base_net_hub_project_id
   restricted_net_hub_project_id     = data.terraform_remote_state.org.outputs.restricted_net_hub_project_id
   restricted_net_hub_project_number = data.terraform_remote_state.org.outputs.restricted_net_hub_project_number
+  organization_service_account      = data.terraform_remote_state.bootstrap.outputs.organization_step_terraform_service_account_email
   networks_service_account          = data.terraform_remote_state.bootstrap.outputs.networks_step_terraform_service_account_email
   projects_service_account          = data.terraform_remote_state.bootstrap.outputs.projects_step_terraform_service_account_email
+
+  dedicated_interconnect_egress_policy = var.enable_dedicated_interconnect ? [
+    {
+      "from" = {
+        "identity_type" = ""
+        "identities"    = ["serviceAccount:${local.networks_service_account}"]
+      },
+      "to" = {
+        "resources" = ["projects/${local.interconnect_project_number}"]
+        "operations" = {
+          "compute.googleapis.com" = {
+            "methods" = ["*"]
+          }
+        }
+      }
+    },
+  ] : []
 }
 
 data "terraform_remote_state" "bootstrap" {

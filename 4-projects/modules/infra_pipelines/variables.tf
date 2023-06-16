@@ -24,12 +24,6 @@ variable "default_region" {
   type        = string
 }
 
-variable "project_prefix" {
-  description = "Name prefix to use for projects created."
-  type        = string
-  default     = "prj"
-}
-
 variable "cloudbuild_project_id" {
   description = "The project id where the pipelines and repos should be created."
   type        = string
@@ -57,7 +51,7 @@ variable "terraform_docker_tag_version" {
 }
 
 variable "cloud_builder_artifact_repo" {
-  description = "GAR Repo that stores TF Cloud Builder images."
+  description = "Artifact Registry (AR) repository that stores TF Cloud Builder images."
   type        = string
 
 }
@@ -65,4 +59,10 @@ variable "cloud_builder_artifact_repo" {
 variable "private_worker_pool_id" {
   description = "ID of the Cloud Build private worker pool."
   type        = string
+}
+
+variable "bucket_prefix" {
+  description = "Name prefix to use for state bucket created."
+  type        = string
+  default     = "bkt"
 }
